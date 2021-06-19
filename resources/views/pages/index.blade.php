@@ -17,13 +17,13 @@
         <img src="{{asset('images/slider1.jpg')}}" alt="..." class="img-responsive">
       </div>
       <div class="item">
-        <img src="images/slider2.png" alt="..." class="img-responsive">
+        <img src="//cdn.tgdd.vn/2021/06/banner/hotsale-830-300-830x300-1.png" alt="..." class="img-responsive">
       </div>
       <div class="item">
         <img src="images/slider3.jpg" alt="..." class="img-responsive">
       </div>
       <div class="item">
-        <img src="images/slider4.jpg" alt="..." class="img-responsive">
+        <img src="//cdn.tgdd.vn/2021/06/banner/hotsale-830-300-830x300-1.png" alt="..." class="img-responsive">
       </div>
     </div>
     <!-- Controls -->
@@ -39,13 +39,7 @@
 </div>
 <!--end slide-->
 
-<div class="container">
-  <h2 style="border-top:2px dashed black;"></h2>
-  <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#phone1">Sản Phẩm Mới</a></li>
-    <li><a data-toggle="tab" href="#phone2">Sản Phẩm khuyến mãi</a></li>
-    <li><a data-toggle="tab" href="#phone3">Sản Phẩm Nổi Bật</a></li>
-  </ul>
+
 
   <div class="tab-content">
     <div id="phone1" class="tab-pane fade in active">
@@ -54,7 +48,7 @@
         <div class="container">
           <div class="row">
             <div class="col-md-12 col-sm-12 col-lg-12">
-              <h2 style="color:blue;">Sản Phẩm Mới</h2>
+            <h2 class="box-common__title" style="font-size: 26px; font-weight: bold; line-height: 40px; width: 32%; padding-top: 25px;">SẢN PHẨM MỚI NHẤT</h2>
             </div>
           </div>
 
@@ -96,14 +90,13 @@
         </div><!--end container-->
       </div>
       <!--end product new-->
-    </div>
-    <div id="phone2" class="tab-pane fade">
+ 
       <!--sale products-->
       <div class="product">
         <div class="container">
           <div class="row">
             <div class="col-md-12 col-sm-12 col-lg-12">
-              <h2 style="color:blue;">Sản Phẩm Khuyến Mãi</h2>
+            <h2 class="box-common__title" style="font-size: 26px; font-weight: bold; line-height: 40px; width: 32%; padding-top: 25px;">Sản Phẩm Khuyến Mãi</h2>
             </div>
           </div>
 
@@ -137,17 +130,15 @@
         </div><!--end container-->
       </div>
       <!--end sale products-->
-    </div>
-    <div id="phone3" class="tab-pane fade">
+
       <!--hightlight products-->
       <div class="product">
         <div class="container">
           <div class="row">
             <div class="col-md-12 col-sm-12 col-lg-12">
-              <h2 style="color:blue;">Sản Phẩm Nổi Bật</h2>
+            <h2 class="box-common__title" style="font-size: 26px; font-weight: bold; line-height: 40px; width: 32%; padding-top: 25px;">Sản Phẩm Nổi Bật</h2>
             </div>
           </div>
-
           <div class="products">
             <div class="row">
               @foreach($hightlight_products as $hightlightproduct)
@@ -179,13 +170,62 @@
               @endforeach
             </div>
           </div>
-
-
         </div><!--end container-->
       </div>
       <!--end hightlight products-->
-    </div>
   </div>
-</div>
 
+
+
+
+  @foreach($category as $item)
+  <?php  $i = 0 ?>
+   <!--hightlight products-->
+    <div class="product">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-lg-12">
+              <h2 class="box-common__title" style="font-size: 26px; font-weight: bold; line-height: 40px; width: 32%; padding-top: 25px;">{{$item->name}}</h2>
+              </div>
+            </div>
+            <div class="products">
+              <div class="row">
+                @foreach($products as $product)
+                  @if($product->trademark->category->id == $item->id)
+                  <?php  $i = $i + 1 ?>
+                  @if($i < 5)
+                      <div class="col-md-3 pd">
+                          <div class="box">
+                            <a href="{{route('detail',$product->id)}}"><img src="{{asset('Admin_style/images/'.$product->images)}}" alt="{!!$product->name!!}"></a>
+                            @if($product->price_sale != 0)
+                              <div class="ribbon"><span>Sale</span></div>
+                            @endif
+                          </div>
+                        <div class="product_details">
+                          <a href="{{route('detail',$product->id)}}"><h3>{!! $product->name !!}</h3></a>
+                          <div class="prices">
+                            @if($product->price_sale == 0)
+                              <span class="price">{!! number_format($product->price) !!} VNĐ</span>
+                            @else
+                              <span class="price_sale">{!! number_format($product->price) !!} VNĐ</span>
+                              <span class="price">{!! number_format($product->price_sale) !!} VNĐ</span>
+                            @endif
+                          </div>
+                          <form action="{{route('postCart')}}" method="post">
+                            <input type="hidden" name="_token" value="{{csrf_token()}}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button class="btn btn-default btn-primary btn-sm" name="product_id" value="{{$product->id}}"><i class="fa fa-shopping-cart" aria-hidden="true"></i></button>
+                            <a href="{{route('detail',$product->id)}}" name="details" class="btn btn-default btn-sm">Details <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                          </form>
+                        </div>
+                     </div>
+                     @endif
+                  @endif
+                @endforeach
+              </div>
+            </div>
+          </div><!--end container-->
+        </div>
+      <!--end hightlight products-->
+   @endforeach
 @stop

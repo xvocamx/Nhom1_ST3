@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Order;
+use App\Comment;
+use App\User;
+use App\Product;
 
 class OrderController extends Controller
 {
@@ -24,4 +27,17 @@ class OrderController extends Controller
       $order->delete();
       return redirect()->route('order.getlist')->with('thongbao','Xóa Thành Công');
     }
+
+    public function getCommentList(){
+      $comment = Comment::all();
+      $user = User::all();
+      $product = Product::all();
+      return view('admin.Comment.list',['comment'=>$comment,'user'=>$user,'product'=>$product]);
+    }
+    public function getCommentDelete($id){
+      $comment = Comment::where('comment_id',$id);
+      $comment->delete();
+      return redirect()->route('comment.getlist')->with('thongbao','Xóa Thành Công');
+    }
+
 }

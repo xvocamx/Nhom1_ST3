@@ -40,7 +40,7 @@
               @foreach($content as $item)
               <tr>
                 <td style="overflow:hidden;">
-                  <img src="{{asset('Admin_style/images/'.$item->options->image)}}" alt="" class="img-responsive img-thumbnail">
+                  <img src="{{asset('Admin_style/images/'.$item->options->image)}}" alt="" class="img-responsive img-thumbnail" style="width: auto;">
                   <p>{!! $item->name !!}</p>
                 </td>
                 <td>

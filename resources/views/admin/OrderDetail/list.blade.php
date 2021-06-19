@@ -35,7 +35,7 @@
                     <tr>
                       <td>{{$stt}}</td>
                       <td>{!! $orderdetail->product->name !!}</td>
-                      <td><img src="Admin_style/images/{!! $orderdetail->product->images !!}" alt="" style="width:70px;"></td>
+                      <td><img src="Admin_style/images/{!! $orderdetail->product->images !!}" alt="" style="width:100px;"></td>
                       <td>{!! $orderdetail['quantity'] !!}</td>
                       <td>{!! number_format($orderdetail['price']) !!} VNĐ</td>
                       <td>

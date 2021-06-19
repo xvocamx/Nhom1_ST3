@@ -7,6 +7,7 @@ use App\Product;
 use App\Category;
 use App\Trademark;
 use App\User;
+use App\Comment;
 use App\Http\Requests\UserRequest;
 use App\Http\Requests\LoginRequest;
 use Hash,Auth;
@@ -14,12 +15,14 @@ use Hash,Auth;
 class PageController extends Controller
 {
 
-    public function getIndex(){
-      $new_products = Product::orderBy('id','DESC')->take(8)->get();
-      $sale_products = Product::where('price_sale','<>',0)->orderBy('id','DESC')->take(8)->get();
-      $hightlight_products = Product::where('hightlights',1)->orderBy('id','DESC')->take(8)->get();
-      return view('pages.index',['new_products'=>$new_products,'sale_products'=>$sale_products,'hightlight_products'=>$hightlight_products]);
-    }
+  public function getIndex(){
+    $products = Product::all();
+    $category = Category::all();
+    $new_products = Product::orderBy('id','DESC')->take(8)->get();
+    $sale_products = Product::where('price_sale','<>',0)->orderBy('id','DESC')->take(8)->get();
+    $hightlight_products = Product::where('hightlights',1)->orderBy('id','DESC')->take(8)->get();
+    return view('pages.index',['new_products'=>$new_products,'sale_products'=>$sale_products,'hightlight_products'=>$hightlight_products,'products'=>$products,'category'=>$category]);
+  }
 
     public function getTrademark($id){
       $trademark = Trademark::find($id);
@@ -27,11 +30,19 @@ class PageController extends Controller
       return view('pages.trademark',['trademark'=>$trademark,'pd_trademark'=>$pd_trademark]);
     }
 
+    public function getCategories($id){
+      $category = Category::find($id);
+      $product = Product::all();
+      return view('pages.categories',['product'=>$product,'category'=>$category]);
+    }
+
     public function getDetail($id){
+      $comment = Comment::all();
+      $user = User::all();
       $product = Product::find($id);
       $product_images = Product::find($id)->product_images->take(3)->toArray();
       $different_products = Product::where('trademark_id',$product->trademark->id)->where('id','<>',$id)->orderBy('id','DESC')->take(10)->get();
-      return view('pages.detail',['product'=>$product,'product_images'=>$product_images,'different_products'=>$different_products]);
+      return view('pages.detail',['product'=>$product,'product_images'=>$product_images,'different_products'=>$different_products,'comment'=>$comment,'user'=>$user]);
     }
 
     public function getRegister(){
@@ -73,6 +84,17 @@ class PageController extends Controller
       $key = $request->key;
       $pd_trademark = Product::where('name','like',"%$key%")->paginate(8);
       return view('pages.search',['pd_trademark'=>$pd_trademark,'key'=>$key]);
+    }
+
+    public function postComment($id,Request $request){
+        $idProduct = $id;
+        $product = Product::find($id);
+        $comment = new Comment;
+        $comment->idProduct = $idProduct;
+        $comment->idUser = Auth::user()->id;
+        $comment->comment = $request->comment;
+        $comment->save();
+        return redirect("detail/".$id);
     }
 
 }

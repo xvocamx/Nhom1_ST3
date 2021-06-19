@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{!! asset('css/style.css') !!}">
+
+    
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -48,7 +51,7 @@
       <div class="container">
         <div class="row">
           <div class="col-sm-6 col-md-6 col-lg-6 logo">
-            <img src="images/logo.png" alt="logo">
+            <img src="images/logo.jpg" alt="logo" width="150">
           </div>
           <div class="col-sm-6 col-md-6 col-lg-6 search">
             <div class="form-group timkiem">
@@ -136,6 +139,8 @@
     <script src="{{  asset('js/jquery.min.js')}}"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="{{  asset('js/bootstrap.min.js')}}"></script>
+
+    
     @yield('script')
   </body>
 </html>

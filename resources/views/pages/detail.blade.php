@@ -18,7 +18,7 @@
         <div class="row">
             <div class="col-md-9 col-lg-9">
                 <div class="sanpham">
-                    <img src="{{asset('Admin_style/images/'.$product->images)}}" alt=""
+                    <img src="{{asset('Admin_style/images/'.$product->images)}}" alt="" style="width: auto;"
                         class="img-thumbnail img-responsive anhlon">
                     <div class="detailstyle">
                         <h3>{!! $product->name !!}</h3>
@@ -89,7 +89,7 @@
                     @foreach($different_products as $differentpd)
                     <div class="sp">
                         <a href="{{route('detail',$differentpd->id)}}">
-                            <img src="{!! asset('Admin_style/images/'.$differentpd->images) !!}" alt="">
+                            <img src="{!! asset('Admin_style/images/'.$differentpd->images) !!}" alt="" >
                             <h5>{{$differentpd->name}}</h5>
                         </a>
                         @if($differentpd->price_sale != 0)
@@ -105,11 +105,51 @@
             </div>
             @endif
         </div>
+        <p class="rating__title" style="line-height: 1.4;font-size: 20px; font-weight: bold;">Đánh giá sản phẩm {{$product->name}}</p>
+        <div class="row">
+            <div class="col-sm-6">
+                @foreach($comment as $item)
+                @if($item->idProduct == $product->id)
+                <div class="media">
+                    <a class="pull-left" href="#"><img class="media-object" src="images/avatar.jpg" width="100px"
+                            alt=""></a>
+                    <div class="media-body">
+                        @foreach($user as $value)
+                        @if($value->id == $item->idUser)
+                        <h4 class="media-heading">{{$value->name}}</h4>
+                        @endif
+                        @endforeach
+                        <p>{{$item->comment}}</p>
+                        <ul class="list-unstyled list-inline media-detail pull-left">
+                            <li><i class="fa fa-calendar"></i><?php
+                                $date=date_create($item->created_at);
+                                echo date_format($date," H:i:s d/m/Y");
+                                ?></li>
+                        </ul>
+                    </div>
+                </div>
+                @endif
+                @endforeach
+
+                @if(Auth::check())
+                <h2>Reviews</h2>
+                <div class="submit-review">
+                    <form action="comment/{{$product->id}}" method="post">
+                        <input type="hidden" name="_token" value="{{csrf_token()}}" />
+                        <p><label for="review">Your review</label> </p>
+                        <textarea name="comment" id="" cols="100" rows="5"></textarea>
+                        <p><input type="submit" value="Submit"></p>
+                    </form>
+                </div>
+                @endif
+            </div>
 
 
+        </div>
+        <br>
 
     </div>
-    
+
 </div>
 @stop
 @section('script')
